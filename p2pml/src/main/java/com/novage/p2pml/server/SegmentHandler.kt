@@ -37,7 +37,11 @@ internal class SegmentHandler(
                     "Missing 'segment' parameter",
                     status = HttpStatusCode.BadRequest,
                 )
-        val decodedSegmentUrl = Utils.decodeBase64Url(segmentUrlParam)
+        var decodedSegmentUrl = Utils.decodeBase64Url(segmentUrlParam)
+        decodedSegmentUrl = decodedSegmentUrl.replace("%7B", "{")
+        decodedSegmentUrl = decodedSegmentUrl.replace("%7D", "}")
+        decodedSegmentUrl = decodedSegmentUrl.replace("%25", "%")
+
         val byteRange = call.request.headers[HttpHeaders.Range]
 
         Logger.d(TAG, "Handling segment request for $decodedSegmentUrl")
